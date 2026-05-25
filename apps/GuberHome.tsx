@@ -48,9 +48,9 @@ const GuberHome: React.FC<GuberHomeProps> = ({ onStart, apps, onSelectApp }) => 
         
         {/* Background radial grid line patterns */}
         <div 
-          className="absolute inset-0 pointer-events-none opacity-30"
+          className="absolute inset-0 pointer-events-none opacity-60"
           style={{
-            backgroundImage: `radial-gradient(circle, rgba(255, 255, 255, 0.25) 1px, transparent 1px)`,
+            backgroundImage: `radial-gradient(circle, rgba(255, 255, 255, 0.45) 1.2px, transparent 1.2px)`,
             backgroundSize: '20px 20px'
           }}
         />
@@ -172,91 +172,48 @@ const GuberHome: React.FC<GuberHomeProps> = ({ onStart, apps, onSelectApp }) => 
                 </button>
               )}
             </div>
-          </motion.div>
-        </div>
 
-        {/* Dynamic Apps Catalog Area - Hanya me-render jika sedang mencari sesuatu */}
-        {searchQuery.trim() !== '' && (
-          <div className="w-full max-w-6xl relative z-10 mt-2 animate-in fade-in duration-500">
-            <div className="flex items-center justify-between px-3 mb-6">
-              <div className="flex items-center gap-2">
-                <div className="w-1.5 h-4 rounded-full" style={{ backgroundColor: primaryColor }} />
-                <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400">
-                  Hasil Pencarian
-                </h2>
-              </div>
-              
-              <span className="text-[10px] font-bold text-slate-500 bg-slate-950 border border-slate-800 px-2.5 py-1 rounded-full">
-                {filteredApps.length} studio ditemukan
-              </span>
-            </div>
+            {/* Hasil Pencarian Kompak & Dekat Kolom Pencarian */}
+            {searchQuery.trim() !== '' && (
+              <div className="w-full mt-4 animate-in fade-in duration-300">
+                <div className="flex items-center justify-between px-1 mb-3">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                    Hasil Pencarian
+                  </span>
+                  <span className="text-[9px] font-bold text-slate-400/80">
+                    {filteredApps.length} ditemukan
+                  </span>
+                </div>
 
-            {filteredApps.length > 0 ? (
-              <motion.div 
-                layout
-                id="app-grid"
-                className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5 w-full"
-              >
-                {filteredApps.map((app, appIdx) => (
-                  <motion.button
-                    key={app.id}
-                    id={`app-${app.id}`}
-                    onClick={() => onSelectApp(app.id)}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: Math.min(appIdx * 0.04, 0.3) }}
-                    whileHover={{ y: -6, scale: 1.01 }}
-                    className="group relative text-left rounded-2xl p-5 md:p-6 border border-white/5 bg-white/[0.02] backdrop-blur-md hover:bg-white/[0.05] hover:border-indigo-500/30 transition-all duration-300 shadow-lg flex flex-col justify-between min-h-[160px] overflow-hidden"
-                  >
-                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-indigo-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none duration-500" />
-                    
-                    <div className="relative z-10 w-full">
-                      <div 
-                        className="w-12 h-12 md:w-14 md:h-14 rounded-xl border flex items-center justify-center mb-4 group-hover:scale-110 transition-all duration-300"
+                {filteredApps.length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
+                    {filteredApps.map((app) => (
+                      <button
+                        key={app.id}
+                        id={`app-${app.id}`}
+                        onClick={() => onSelectApp(app.id)}
+                        className="group relative px-8 py-3.5 rounded-2xl font-black text-white text-xs tracking-[0.15em] uppercase overflow-hidden transition-all hover:scale-105 active:scale-95 cursor-pointer border border-white/45 flex items-center justify-center text-center w-full min-h-[50px]"
                         style={{
-                          backgroundColor: `color-mix(in srgb, ${primaryColor} 15%, transparent)`,
-                          borderColor: `color-mix(in srgb, ${primaryColor} 30%, transparent)`
+                          backgroundColor: primaryColor,
+                          boxShadow: `0 10px 25px -5px color-mix(in srgb, ${primaryColor}, transparent 45%), inset 0 1px 2px rgba(255,255,255,0.15)`
                         }}
                       >
-                        <div className="transition-colors" style={{ color: `color-mix(in srgb, ${primaryColor}, white 60%)` }}>
-                          {app.icon}
-                        </div>
-                      </div>
-                      <h3 className="font-bold text-white text-sm md:text-base leading-tight mb-1 group-hover:text-slate-200 transition-colors">
-                        {app.name}
-                      </h3>
-                      <p className="text-xs text-slate-500 font-medium leading-snug line-clamp-2">
-                        {app.description}
-                      </p>
-                    </div>
-
-                    <div className="relative z-10 w-full mt-4 flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <span className="text-[8px] font-mono font-bold text-slate-500 uppercase tracking-tight">
-                        {app.filename}
-                      </span>
-                      <ArrowRight size={12} className="translate-x-[-4px] group-hover:translate-x-0 transition-transform duration-300" style={{ color: `color-mix(in srgb, ${primaryColor}, white 40%)` }} />
-                    </div>
-                  </motion.button>
-                ))}
-              </motion.div>
-            ) : (
-              <motion.div 
-                id="empty-state"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="w-full py-16 flex flex-col items-center justify-center text-center bg-white/[0.01] border border-dashed border-white/10 rounded-3xl"
-              >
-                <div className="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center mb-3" style={{ color: `color-mix(in srgb, ${primaryColor}, white 40%)` }}>
-                  <Compass size={22} />
-                </div>
-                <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest">Tidak ditemukan hasil</h3>
-                <p className="text-xs text-slate-600 font-medium max-w-sm mt-1 leading-normal">
-                  Fitur "{searchQuery}" tidak tersedia. Coba kata kunci pencarian alternatif lain.
-                </p>
-              </motion.div>
+                        <div className="absolute inset-0 opacity-0 group-hover:opacity-15 bg-white transition-opacity duration-300" />
+                        <span className="relative font-black truncate max-w-full">
+                          {app.name}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="w-full py-6 flex flex-col items-center justify-center text-center bg-white/[0.02] border border-dashed border-white/10 rounded-2xl">
+                    <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Tidak ditemukan hasil</span>
+                  </div>
+                )}
+              </div>
             )}
-          </div>
-        )}
+          </motion.div>
+        </div>
 
         {/* Footnote Signature */}
         <motion.div 

@@ -44,12 +44,6 @@ export const ThemeCustomizerModal: React.FC<ThemeCustomizerModalProps> = ({ isOp
         
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-sm font-black text-white uppercase tracking-[0.1em]">Warna Tema</h2>
-          <button 
-            onClick={handleReset}
-            className="text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-indigo-400 transition-colors cursor-pointer"
-          >
-            Reset
-          </button>
         </div>
         
         <div className="space-y-6">
@@ -136,17 +130,6 @@ export const ThemeCustomizerModal: React.FC<ThemeCustomizerModalProps> = ({ isOp
             )}
           </div>
         </div>
-
-        <button 
-          onClick={onClose}
-          className="w-full mt-8 text-white py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] transition-all active:scale-95 shadow-lg cursor-pointer border border-white/10"
-          style={{
-            backgroundColor: primaryColor,
-            boxShadow: `0 10px 30px -5px color-mix(in srgb, ${primaryColor}, transparent 50%)`
-          }}
-        >
-          Terapkan
-        </button>
       </div>
     </div>
   );
