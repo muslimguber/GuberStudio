@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTheme } from '../contexts/ThemeContext';
-import { X } from 'lucide-react';
+import { X, Copy, Check } from 'lucide-react';
 
 interface ThemeCustomizerModalProps {
   isOpen: boolean;
@@ -8,111 +8,142 @@ interface ThemeCustomizerModalProps {
 }
 
 export const ThemeCustomizerModal: React.FC<ThemeCustomizerModalProps> = ({ isOpen, onClose }) => {
-  const { primaryColor, secondaryColor, setPrimaryColor, setSecondaryColor } = useTheme();
+  const { primaryColor, setPrimaryColor, setSecondaryColor } = useTheme();
+  const [copied, setCopied] = useState(false);
 
   if (!isOpen) return null;
 
   const primaryPresets = [
-    { name: 'Ungu Gelap', color: '#1a0b2e' },
-    { name: 'Toska Gelap', color: '#0f766e' },
-    { name: 'Navy', color: '#1e3a8a' },
+    { name: 'Hijau Gelap', color: '#033003' },
+    { name: 'Ungu Gelap', color: '#410052' },
+    { name: 'Merah Gelap', color: '#4c0519' },
+    { name: 'Indigo Gelap', color: '#1e1b4b' },
     { name: 'Hitam', color: '#000000' },
-  ];
-
-  const secondaryPresets = [
-    { name: 'Putih', color: '#ffffff' },
-    { name: 'Hitam', color: '#000000' },
-    { name: 'Kuning', color: '#f59e0b' },
   ];
 
   const handleReset = () => {
-    setPrimaryColor('#1a0b2e');
+    setPrimaryColor('#1e1b4b');
     setSecondaryColor('#ffffff');
   };
 
+  const handleCopy = () => {
+    navigator.clipboard.writeText(primaryColor.toUpperCase());
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  };
+
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[1000] p-4">
-      <div className="bg-white p-8 rounded-[32px] shadow-2xl w-full max-w-[280px] relative border border-slate-100 animate-in zoom-in duration-300">
+    <div className="fixed inset-0 bg-slate-950/75 backdrop-blur-md flex items-center justify-center z-[1000] p-4">
+      <div className="bg-slate-900 border border-white/10 p-6 md:p-8 rounded-[28px] shadow-2xl w-full max-w-[340px] relative animate-in zoom-in-95 duration-200">
         <button 
           onClick={onClose} 
-          className="absolute top-5 right-5 text-slate-400 hover:text-slate-600 p-2 hover:bg-slate-50 rounded-full transition-all"
+          className="absolute top-5 right-5 text-slate-400 hover:text-white p-2 hover:bg-white/5 rounded-full transition-all cursor-pointer"
         >
           <X size={18} />
         </button>
         
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-lg font-black text-slate-800 uppercase tracking-tight">Warna Tema</h2>
+          <h2 className="text-sm font-black text-white uppercase tracking-[0.1em]">Warna Tema</h2>
           <button 
             onClick={handleReset}
-            className="text-[8px] font-black text-slate-400 uppercase tracking-widest hover:text-slate-800 transition-colors"
+            className="text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-indigo-400 transition-colors cursor-pointer"
           >
             Reset
           </button>
         </div>
         
-        <div className="space-y-8">
-          {/* Primary Color Section */}
+        <div className="space-y-6">
+          {/* Primary Presets Group */}
           <div className="space-y-3">
-            <label className="block text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Pilih Tema</label>
-            <div className="grid grid-cols-4 gap-2">
+            <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Pilih Tema</label>
+            <div className="grid grid-cols-5 gap-3.5">
               {primaryPresets.map((preset) => (
                 <button
                   key={preset.color}
+                  title={preset.name}
                   onClick={() => setPrimaryColor(preset.color)}
-                  className={`w-10 h-10 rounded-xl border-2 transition-all ${primaryColor === preset.color ? 'border-slate-800 scale-105 shadow-md' : 'border-slate-50 hover:border-slate-200'}`}
+                  className={`w-full h-16 rounded-[14px] border-2 transition-all cursor-pointer relative ${
+                    primaryColor.toLowerCase() === preset.color.toLowerCase() 
+                      ? 'border-indigo-400 scale-110 shadow-[0_0_15px_rgba(99,102,241,0.4)]' 
+                      : 'border-white/10 hover:border-white/30 hover:scale-105 bg-slate-800'
+                  }`}
                   style={{ backgroundColor: preset.color }}
-                />
+                >
+                  {primaryColor.toLowerCase() === preset.color.toLowerCase() && (
+                    <span className="absolute inset-x-0 bottom-1 flex items-center justify-center">
+                      <Check size={12} className="text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]" />
+                    </span>
+                  )}
+                </button>
               ))}
-              <div className="relative">
+            </div>
+          </div>
+
+          {/* Custom & Code Area */}
+          <div className="space-y-3 pt-4 border-t border-white/5">
+            <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Kustom Kode Warna</label>
+            
+            <div className="flex items-center gap-3 bg-white/[0.03] border border-white/10 rounded-2xl p-3 pr-2 shadow-inner">
+              {/* Color Picker Wrapper */}
+              <div className="relative w-10 h-10 overflow-hidden rounded-xl bg-slate-800 flex-shrink-0 border border-white/10">
                 <input
                   type="color"
                   value={primaryColor}
                   onChange={(e) => setPrimaryColor(e.target.value)}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                  className="absolute inset-[-4px] w-[calc(100%+8px)] h-[calc(100%+8px)] cursor-pointer z-10 opacity-0"
                 />
                 <div 
-                  className={`w-10 h-10 rounded-xl border-2 flex items-center justify-center transition-all ${!primaryPresets.find(p => p.color === primaryColor) ? 'border-slate-800 scale-105 shadow-md' : 'border-slate-50 hover:border-slate-200'}`}
+                  className="w-full h-full"
                   style={{ backgroundColor: primaryColor }}
-                >
-                  <div className="w-1 h-1 rounded-full bg-white/50" />
-                </div>
+                />
               </div>
-            </div>
-          </div>
 
-          {/* Secondary Color Section */}
-          <div className="space-y-3">
-            <label className="block text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Warna Aksen</label>
-            <div className="grid grid-cols-4 gap-2">
-              {secondaryPresets.map((preset) => (
-                <button
-                  key={preset.color}
-                  onClick={() => setSecondaryColor(preset.color)}
-                  className={`w-10 h-10 rounded-xl border-2 transition-all ${secondaryColor === preset.color ? 'border-slate-800 scale-105 shadow-md' : 'border-slate-50 hover:border-slate-200'}`}
-                  style={{ backgroundColor: preset.color }}
+              {/* Hex Code Input Display */}
+              <div className="flex-1 min-w-0">
+                <input 
+                  type="text"
+                  value={primaryColor.toUpperCase()}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (val.startsWith('#') && val.length <= 7) {
+                      setPrimaryColor(val);
+                    } else if (!val.startsWith('#') && val.length <= 6) {
+                      setPrimaryColor('#' + val);
+                    }
+                  }}
+                  className="w-full bg-transparent font-mono text-sm text-white font-medium focus:outline-none tracking-wider uppercase"
                 />
-              ))}
-              <div className="relative">
-                <input
-                  type="color"
-                  value={secondaryColor}
-                  onChange={(e) => setSecondaryColor(e.target.value)}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                />
-                <div 
-                  className={`w-10 h-10 rounded-xl border-2 flex items-center justify-center transition-all ${!secondaryPresets.find(p => p.color === secondaryColor) ? 'border-slate-800 scale-105 shadow-md' : 'border-slate-50 hover:border-slate-200'}`}
-                  style={{ backgroundColor: secondaryColor }}
-                >
-                  <div className="w-1 h-1 rounded-full bg-white/50" />
-                </div>
               </div>
+
+              {/* Copy Button */}
+              <button 
+                onClick={handleCopy}
+                className="p-2 text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all cursor-pointer flex items-center justify-center"
+                title="Salin kode warna"
+              >
+                {copied ? (
+                  <Check size={16} className="text-emerald-400" />
+                ) : (
+                  <Copy size={16} />
+                )}
+              </button>
             </div>
+            
+            {copied && (
+              <p className="text-[10px] font-medium text-emerald-400 text-right animate-pulse">
+                Kode warna berhasil disalin!
+              </p>
+            )}
           </div>
         </div>
 
         <button 
           onClick={onClose}
-          className="w-full mt-8 bg-slate-900 text-white py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] hover:bg-slate-800 transition-all active:scale-95 shadow-xl shadow-slate-200"
+          className="w-full mt-8 text-white py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] transition-all active:scale-95 shadow-lg cursor-pointer border border-white/10"
+          style={{
+            backgroundColor: primaryColor,
+            boxShadow: `0 10px 30px -5px color-mix(in srgb, ${primaryColor}, transparent 50%)`
+          }}
         >
           Terapkan
         </button>

@@ -27,26 +27,43 @@ const GuberHome: React.FC<GuberHomeProps> = ({ onStart, apps, onSelectApp }) => 
       );
 
   return (
-    <div id="guber-home-outer-frame" className="min-h-screen w-full bg-slate-950 flex items-center justify-center p-4 sm:p-6 md:p-8">
+    <div 
+      id="guber-home-outer-frame" 
+      className="min-h-screen w-full flex items-center justify-center p-4 sm:p-6 md:p-8 transition-colors duration-500"
+      style={{
+        background: `radial-gradient(circle at center, color-mix(in srgb, ${primaryColor} 85%, #000000 15%), color-mix(in srgb, ${primaryColor} 70%, #000000 30%))`
+      }}
+    >
       
       {/* Bingkai Utama Berbentuk Rounded Elips Melayang */}
       <div 
         id="guber-home-root" 
-        className="w-full max-w-6xl bg-slate-900/30 rounded-[32px] md:rounded-[48px] border border-white/10 text-slate-100 flex flex-col items-center pt-16 md:pt-24 px-6 md:px-12 pb-20 relative overflow-hidden select-none shadow-2xl"
+        className="w-full max-w-6xl rounded-[32px] md:rounded-[48px] border text-slate-100 flex flex-col items-center pt-16 md:pt-24 px-6 md:px-12 pb-20 relative overflow-hidden select-none shadow-2xl transition-all duration-500"
+        style={{
+          backgroundColor: `color-mix(in srgb, ${primaryColor} 94%, #000000 6%)`,
+          borderColor: `color-mix(in srgb, ${primaryColor} 30%, rgba(255, 255, 255, 0.2) 70%)`,
+          backdropFilter: 'blur(28px)'
+        }}
       >
         
         {/* Background radial grid line patterns */}
         <div 
-          className="absolute inset-0 pointer-events-none opacity-10"
+          className="absolute inset-0 pointer-events-none opacity-30"
           style={{
-            backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(99, 102, 241, 0.15) 1px, transparent 0)',
-            backgroundSize: '32px 32px'
+            backgroundImage: `radial-gradient(circle, rgba(255, 255, 255, 0.25) 1px, transparent 1px)`,
+            backgroundSize: '20px 20px'
           }}
         />
 
-        {/* Flat atmospheric glow backdrop without complex shifting color animation */}
-        <div className="absolute top-[-100px] left-[-100px] w-96 h-96 rounded-full bg-indigo-600/5 blur-[100px] pointer-events-none" />
-        <div className="absolute bottom-[-150px] right-[-100px] w-[500px] h-[500px] rounded-full bg-purple-600/5 blur-[130px] pointer-events-none" />
+        {/* Dynamic ambient backdrop glows */}
+        <div 
+          className="absolute top-[-100px] left-[-100px] w-96 h-96 rounded-full blur-[100px] pointer-events-none transition-colors duration-500" 
+          style={{ backgroundColor: `color-mix(in srgb, ${primaryColor} 10%, transparent)` }}
+        />
+        <div 
+          className="absolute bottom-[-150px] right-[-100px] w-[500px] h-[500px] rounded-full blur-[130px] pointer-events-none transition-colors duration-500" 
+          style={{ backgroundColor: `color-mix(in srgb, ${primaryColor} 8%, transparent)` }}
+        />
 
         {/* Hero Header Area */}
         <div className="flex flex-col items-center text-center relative z-10 max-w-4xl mx-auto w-full mb-12">
@@ -59,7 +76,7 @@ const GuberHome: React.FC<GuberHomeProps> = ({ onStart, apps, onSelectApp }) => 
             transition={{ duration: 0.8, type: 'spring' }}
             className="relative mb-6"
           >
-            <div className="absolute inset-0 bg-indigo-500/10 rounded-full blur-[60px] pointer-events-none" />
+            <div className="absolute inset-0 bg-indigo-500/5 rounded-full blur-[60px] pointer-events-none" />
             <motion.img 
               src="https://i.ibb.co.com/HLG6zZnr/LOGO-GUBER.png" 
               alt="Guber Studio Logo" 
@@ -84,10 +101,10 @@ const GuberHome: React.FC<GuberHomeProps> = ({ onStart, apps, onSelectApp }) => 
             className="space-y-3"
           >
             <h1 className="text-4xl md:text-5xl font-black tracking-tight text-white leading-none uppercase">
-              GUBER <span className="bg-gradient-to-r from-indigo-400 via-violet-400 to-purple-400 bg-clip-text text-transparent">STUDIO</span> AI
+              GUBER <span className="bg-clip-text text-transparent" style={{ backgroundImage: `linear-gradient(to right, color-mix(in srgb, ${primaryColor}, white 60%), color-mix(in srgb, ${primaryColor}, white 95%))` }}>STUDIO</span> AI
             </h1>
             <p className="text-sm md:text-base font-medium text-slate-400 max-w-lg mx-auto leading-relaxed">
-              Edit Foto Profesional dengan <span className="text-indigo-400 font-bold">Guber Studio Canggih</span>
+              Edit Foto Profesional dengan <span className="font-bold" style={{ color: `color-mix(in srgb, ${primaryColor}, white 70%)` }}>Guber Studio Canggih</span>
             </p>
           </motion.div>
 
@@ -104,7 +121,7 @@ const GuberHome: React.FC<GuberHomeProps> = ({ onStart, apps, onSelectApp }) => 
               className="group relative px-10 py-4 rounded-2xl font-black text-white text-sm tracking-[0.2em] uppercase overflow-hidden transition-all hover:scale-105 active:scale-95 cursor-pointer border-2 border-white"
               style={{
                 backgroundColor: primaryColor,
-                boxShadow: `0 20px 50px -5px color-mix(in srgb, ${primaryColor}, transparent 50%), inset 0 2px 4px rgba(255, 255, 255, 0.2)`
+                boxShadow: `0 20px 50px -5px color-mix(in srgb, ${primaryColor}, transparent 55%), inset 0 2px 4px rgba(255, 255, 255, 0.2)`
               }}
             >
               <div 
@@ -125,7 +142,13 @@ const GuberHome: React.FC<GuberHomeProps> = ({ onStart, apps, onSelectApp }) => 
             transition={{ delay: 0.2, duration: 0.6 }}
             className="max-w-xl mx-auto w-full mt-10 relative px-2"
           >
-            <div className="relative rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xl focus-within:border-indigo-500/40 focus-within:shadow-[0_0_0_4px_rgba(99,102,241,0.1)] transition-all duration-300">
+            <div 
+              className="relative rounded-2xl bg-white/5 border backdrop-blur-xl transition-all duration-300"
+              style={{
+                borderColor: searchQuery ? `color-mix(in srgb, ${primaryColor}, rgba(255,255,255,0.2) 30%)` : 'rgba(255,255,255,0.1)',
+                boxShadow: searchQuery ? `0 0 25px -5px color-mix(in srgb, ${primaryColor}, transparent 60%)` : undefined
+              }}
+            >
               <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400">
                 <Search size={20} />
               </div>
@@ -157,13 +180,13 @@ const GuberHome: React.FC<GuberHomeProps> = ({ onStart, apps, onSelectApp }) => 
           <div className="w-full max-w-6xl relative z-10 mt-2 animate-in fade-in duration-500">
             <div className="flex items-center justify-between px-3 mb-6">
               <div className="flex items-center gap-2">
-                <div className="w-1.5 h-4 bg-indigo-500 rounded-full" />
+                <div className="w-1.5 h-4 rounded-full" style={{ backgroundColor: primaryColor }} />
                 <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400">
                   Hasil Pencarian
                 </h2>
               </div>
               
-              <span className="text-[10px] font-bold text-slate-500 bg-slate-900 border border-slate-800 px-2.5 py-1 rounded-full">
+              <span className="text-[10px] font-bold text-slate-500 bg-slate-950 border border-slate-800 px-2.5 py-1 rounded-full">
                 {filteredApps.length} studio ditemukan
               </span>
             </div>
@@ -188,12 +211,18 @@ const GuberHome: React.FC<GuberHomeProps> = ({ onStart, apps, onSelectApp }) => 
                     <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-indigo-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none duration-500" />
                     
                     <div className="relative z-10 w-full">
-                      <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-gradient-to-br from-indigo-500/10 to-violet-500/10 border border-indigo-500/20 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:border-indigo-500/40 transition-all duration-300">
-                        <div className="text-indigo-400 group-hover:text-indigo-300 transition-colors">
+                      <div 
+                        className="w-12 h-12 md:w-14 md:h-14 rounded-xl border flex items-center justify-center mb-4 group-hover:scale-110 transition-all duration-300"
+                        style={{
+                          backgroundColor: `color-mix(in srgb, ${primaryColor} 15%, transparent)`,
+                          borderColor: `color-mix(in srgb, ${primaryColor} 30%, transparent)`
+                        }}
+                      >
+                        <div className="transition-colors" style={{ color: `color-mix(in srgb, ${primaryColor}, white 60%)` }}>
                           {app.icon}
                         </div>
                       </div>
-                      <h3 className="font-bold text-white text-sm md:text-base leading-tight mb-1 group-hover:text-indigo-300 transition-colors">
+                      <h3 className="font-bold text-white text-sm md:text-base leading-tight mb-1 group-hover:text-slate-200 transition-colors">
                         {app.name}
                       </h3>
                       <p className="text-xs text-slate-500 font-medium leading-snug line-clamp-2">
@@ -205,7 +234,7 @@ const GuberHome: React.FC<GuberHomeProps> = ({ onStart, apps, onSelectApp }) => 
                       <span className="text-[8px] font-mono font-bold text-slate-500 uppercase tracking-tight">
                         {app.filename}
                       </span>
-                      <ArrowRight size={12} className="text-indigo-400 translate-x-[-4px] group-hover:translate-x-0 transition-transform duration-300" />
+                      <ArrowRight size={12} className="translate-x-[-4px] group-hover:translate-x-0 transition-transform duration-300" style={{ color: `color-mix(in srgb, ${primaryColor}, white 40%)` }} />
                     </div>
                   </motion.button>
                 ))}
@@ -217,7 +246,7 @@ const GuberHome: React.FC<GuberHomeProps> = ({ onStart, apps, onSelectApp }) => 
                 animate={{ opacity: 1 }}
                 className="w-full py-16 flex flex-col items-center justify-center text-center bg-white/[0.01] border border-dashed border-white/10 rounded-3xl"
               >
-                <div className="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center text-slate-500 mb-3">
+                <div className="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center mb-3" style={{ color: `color-mix(in srgb, ${primaryColor}, white 40%)` }}>
                   <Compass size={22} />
                 </div>
                 <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest">Tidak ditemukan hasil</h3>
@@ -236,7 +265,7 @@ const GuberHome: React.FC<GuberHomeProps> = ({ onStart, apps, onSelectApp }) => 
           transition={{ delay: 0.3, duration: 0.6 }}
           className="mt-16 relative z-10 text-center"
         >
-          <p className="text-slate-600 font-black text-[9px] uppercase tracking-[0.2em]">
+          <p className="text-white font-black text-[9px] uppercase tracking-[0.2em] opacity-80">
             by Guber Smart
           </p>
         </motion.div>
