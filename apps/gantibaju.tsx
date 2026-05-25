@@ -267,6 +267,7 @@ const GantiBaju: React.FC = () => {
                     onClear={() => { setOriginalModel(null); setBeforeImage(null); }}
                     aspectRatio="9-16"
                     labelInside
+                    dark
                   />
                 </div>
               </div>
@@ -313,6 +314,7 @@ const GantiBaju: React.FC = () => {
                         onClear={() => setFullSetAsset(null)}
                         aspectRatio="square"
                         labelInside
+                        dark
                       />
                     </div>
 
@@ -368,6 +370,7 @@ const GantiBaju: React.FC = () => {
                           onClear={() => setTopAsset(null)}
                           aspectRatio="square"
                           labelInside
+                          dark
                         />
                       </div>
                     </div>
@@ -383,6 +386,7 @@ const GantiBaju: React.FC = () => {
                           onClear={() => setBottomAsset(null)}
                           aspectRatio="square"
                           labelInside
+                          dark
                         />
                       </div>
                     </div>
@@ -507,7 +511,7 @@ const GantiBaju: React.FC = () => {
               
               <div className="lg:flex-1 flex items-center justify-center min-h-0 w-full overflow-hidden">
                 <div 
-                  className={`bg-white/5 border border-dashed rounded-[24px] flex items-center justify-center overflow-hidden relative group transition-all duration-500 shadow-inner ${
+                  className={`bg-white/15 border border-dashed rounded-[24px] flex items-center justify-center overflow-hidden relative group transition-all duration-500 shadow-inner ${
                     aspectRatio === '1:1' ? 'aspect-square' :
                     aspectRatio === '3:4' ? 'aspect-[3/4]' :
                     aspectRatio === '4:3' ? 'aspect-[4/3]' :
@@ -515,7 +519,7 @@ const GantiBaju: React.FC = () => {
                     'aspect-[16/9]'
                   }`}
                   style={{ 
-                    borderColor: resultImage ? 'rgba(255 ,255, 255, 0.2)' : 'rgba(255, 255, 255, 0.1)',
+                    borderColor: resultImage ? 'rgba(255, 255, 255, 0.3)' : 'rgba(255, 255, 255, 0.2)',
                     backgroundColor: resultImage ? 'transparent' : undefined,
                     width: '100%',
                     height: 'auto',
