@@ -43,7 +43,15 @@ export const ThemeCustomizerModal: React.FC<ThemeCustomizerModalProps> = ({ isOp
         </button>
         
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-sm font-black text-white uppercase tracking-[0.1em]">Warna Tema</h2>
+          <button
+            onClick={() => {
+              setPrimaryColor('#00566B');
+              setSecondaryColor('#ffffff');
+            }}
+            className="text-xs font-black px-5 py-2 rounded-xl bg-white/10 text-white hover:bg-white/20 hover:scale-105 active:scale-95 tracking-widest transition-all uppercase cursor-pointer border border-white/5 mx-auto"
+          >
+            DEFAULT
+          </button>
         </div>
         
         <div className="space-y-6">
