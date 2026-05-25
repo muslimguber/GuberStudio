@@ -1,0 +1,8 @@
+{
+  "name": "GUBERSTUDIO.MY.ID",
+  "description": "Studio AI Profesional untuk pengolahan foto, katalog fashion, dan mockup produk dengan teknologi Neural Capture.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
