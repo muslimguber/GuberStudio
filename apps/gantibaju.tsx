@@ -277,12 +277,12 @@ const GantiBaju: React.FC = () => {
                 <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
                   <Layers size={14} className="text-slate-300" /> 2. Mode Pakaian
                 </label>
-                <div className="grid grid-cols-1 gap-1.5 p-1.5 bg-white/5 border border-white/5 rounded-2xl">
+                <div className={`grid grid-cols-1 gap-1.5 p-1.5 bg-black/60 backdrop-blur-xl border border-white/10 rounded-2xl transition-opacity duration-300 ${!resultImage ? 'opacity-90' : 'opacity-100'}`}>
                   {(['PARTS', 'FULL_SET', 'PROMPT'] as const).map((m) => (
                     <button
                       key={m}
                       onClick={() => setMode(m)}
-                      className={`py-3 lg:py-1.5 rounded-xl text-[11px] lg:text-[9px] font-black uppercase transition-all ${mode === m ? 'bg-white/15 text-white shadow-sm' : 'text-slate-400 hover:text-white'}`}
+                      className={`py-3 lg:py-1.5 rounded-xl text-[11px] lg:text-[9px] font-black uppercase transition-all ${mode === m ? 'bg-white/20 text-white shadow-md border border-white/15' : 'text-slate-400 hover:text-white'}`}
                       style={{ color: mode === m ? 'white' : undefined }}
                     >
                       {m === 'FULL_SET' ? 'Satu Set' : m === 'PARTS' ? 'Atasan/Bawahan' : 'Prompt AI'}
@@ -327,7 +327,7 @@ const GantiBaju: React.FC = () => {
                           value={customPrompt}
                           onChange={(e) => setCustomPrompt(e.target.value)}
                           placeholder="Mendetailkan hal yang dianggap perlu..."
-                          className="w-full min-h-[80px] p-4 bg-white/5 border border-white/10 rounded-3xl text-xs font-medium text-white placeholder-white/30 focus:border-white/20 focus:outline-none resize-none transition-all shadow-inner"
+                          className="w-full min-h-[80px] p-4 bg-black/60 backdrop-blur-xl border border-white/15 rounded-3xl text-xs font-medium text-white placeholder-white/30 focus:border-white/20 focus:outline-none resize-none transition-all shadow-inner"
                         />
                         <div className="absolute bottom-3 right-3 flex gap-1.5">
                           <button
@@ -400,7 +400,7 @@ const GantiBaju: React.FC = () => {
                           value={customPrompt}
                           onChange={(e) => setCustomPrompt(e.target.value)}
                           placeholder="Mendetailkan hal yang dianggap perlu..."
-                          className="w-full min-h-[80px] p-4 bg-white/5 border border-white/10 rounded-3xl text-xs font-medium text-white placeholder-white/30 focus:border-white/20 focus:outline-none resize-none transition-all shadow-inner"
+                          className="w-full min-h-[80px] p-4 bg-black/60 backdrop-blur-xl border border-white/15 rounded-3xl text-xs font-medium text-white placeholder-white/30 focus:border-white/20 focus:outline-none resize-none transition-all shadow-inner"
                         />
                          <div className="absolute bottom-3 right-3 flex gap-1.5">
                           <button
@@ -439,7 +439,7 @@ const GantiBaju: React.FC = () => {
                         value={customPrompt}
                         onChange={(e) => setCustomPrompt(e.target.value)}
                         placeholder="Contoh: Gaun pesta warna merah dengan motif bunga emas..."
-                        className="w-full min-h-[450px] lg:min-h-[250px] p-6 bg-white/5 border border-white/10 rounded-[32px] text-base lg:text-sm font-medium text-white placeholder-white/30 focus:border-white/20 focus:outline-none resize-none transition-all shadow-inner"
+                        className="w-full min-h-[450px] lg:min-h-[250px] p-6 bg-black/60 backdrop-blur-xl border border-white/15 rounded-[32px] text-base lg:text-sm font-medium text-white placeholder-white/30 focus:border-white/20 focus:outline-none resize-none transition-all shadow-inner"
                       />
                       <div className="absolute bottom-4 right-4 flex gap-2">
                         <button
@@ -487,7 +487,7 @@ const GantiBaju: React.FC = () => {
                 </label>
                 
                 {/* Aspect Ratio Selection */}
-                <div className="flex-1 flex items-center gap-2 lg:gap-1 overflow-x-auto no-scrollbar justify-end ml-4">
+                <div className={`flex-1 flex items-center gap-2 lg:gap-1 overflow-x-auto no-scrollbar justify-end ml-4 transition-opacity duration-300 ${!resultImage ? 'opacity-90' : 'opacity-100'}`}>
                   {ratios.map((r) => (
                     <button
                       key={r.value}
@@ -495,7 +495,7 @@ const GantiBaju: React.FC = () => {
                       className={`px-3 py-1.5 lg:px-2 lg:py-1 rounded-lg border transition-all text-[10px] lg:text-[8px] font-black shrink-0 ${
                         aspectRatio === r.value 
                           ? 'shadow-sm' 
-                          : 'border-white/5 bg-white/5 text-slate-300 hover:border-white/10 hover:bg-white/10'
+                          : 'border-white/10 bg-black/60 backdrop-blur-md text-slate-300 hover:border-white/20 hover:bg-black/85'
                       }`}
                       style={{
                         backgroundColor: aspectRatio === r.value ? primaryColor : undefined,
@@ -511,7 +511,7 @@ const GantiBaju: React.FC = () => {
               
               <div className="lg:flex-1 flex items-center justify-center min-h-0 w-full overflow-hidden">
                 <div 
-                  className={`bg-white/15 border border-dashed rounded-[24px] flex items-center justify-center overflow-hidden relative group transition-all duration-500 shadow-inner ${
+                  className={`bg-black/75 backdrop-blur-2xl border border-dashed rounded-[24px] flex items-center justify-center overflow-hidden relative group transition-all duration-500 shadow-inner ${!resultImage ? 'opacity-90' : 'opacity-100'} ${
                     aspectRatio === '1:1' ? 'aspect-square' :
                     aspectRatio === '3:4' ? 'aspect-[3/4]' :
                     aspectRatio === '4:3' ? 'aspect-[4/3]' :
@@ -589,7 +589,7 @@ const GantiBaju: React.FC = () => {
                         </div>
                       </motion.div>
                     ) : (
-                      <div className="flex flex-col items-center justify-center p-12 text-center opacity-40">
+                      <div className="flex flex-col items-center justify-center p-12 text-center opacity-100">
                         <div className="w-20 h-20 rounded-3xl bg-white/10 flex items-center justify-center mb-4">
                           <img src="https://i.ibb.co.com/HLG6zZnr/LOGO-GUBER.png" className="w-12 h-12 object-contain grayscale opacity-50" alt="Logo" />
                         </div>
@@ -600,8 +600,7 @@ const GantiBaju: React.FC = () => {
                 </div>
               </div>
 
-                {/* Action Buttons */}
-                <div className="grid grid-cols-5 lg:grid-cols-7 gap-2 lg:gap-3 w-full mx-auto">
+                <div className={`grid grid-cols-5 lg:grid-cols-7 gap-2 lg:gap-3 w-full mx-auto transition-opacity duration-300 ${!resultImage ? 'opacity-90' : 'opacity-100'}`}>
                   <button 
                     onClick={handleProcessFitting}
                     disabled={processing.isProcessing || !originalModel || (mode === 'FULL_SET' ? !fullSetAsset : mode === 'PARTS' ? (!topAsset && !bottomAsset) : !customPrompt.trim())}
@@ -619,7 +618,7 @@ const GantiBaju: React.FC = () => {
                     onClick={() => setShowPreview(true)}
                     disabled={processing.isProcessing || !resultImage}
                     title="Preview"
-                    className="order-1 lg:order-2 py-4 rounded-2xl border border-white/10 flex items-center justify-center text-white/80 hover:bg-white/15 hover:text-white transition-all disabled:opacity-30 bg-white/10 shadow-sm"
+                    className="order-1 lg:order-2 py-4 rounded-2xl border border-white/15 flex items-center justify-center text-white/80 hover:bg-black/85 hover:text-white transition-all disabled:opacity-30 bg-black/60 backdrop-blur-md shadow-sm"
                   >
                     <Eye size={20} />
                   </button>
@@ -627,7 +626,7 @@ const GantiBaju: React.FC = () => {
                     onClick={() => setIsCropping(true)}
                     disabled={processing.isProcessing || !resultImage}
                     title="Crop"
-                    className="order-2 lg:order-3 py-4 rounded-2xl border border-white/10 flex items-center justify-center text-white/80 hover:bg-white/15 hover:text-white transition-all disabled:opacity-30 bg-white/10 shadow-sm"
+                    className="order-2 lg:order-3 py-4 rounded-2xl border border-white/15 flex items-center justify-center text-white/80 hover:bg-black/85 hover:text-white transition-all disabled:opacity-30 bg-black/60 backdrop-blur-md shadow-sm"
                   >
                     <Scissors size={20} />
                   </button>
@@ -635,7 +634,7 @@ const GantiBaju: React.FC = () => {
                     onClick={handleSharpen}
                     disabled={processing.isProcessing || !resultImage}
                     title="Sharpen"
-                    className="order-3 lg:order-4 py-4 rounded-2xl border border-white/10 flex items-center justify-center text-white/80 hover:bg-white/15 hover:text-white transition-all disabled:opacity-30 bg-white/10 shadow-sm"
+                    className="order-3 lg:order-4 py-4 rounded-2xl border border-white/15 flex items-center justify-center text-white/80 hover:bg-black/85 hover:text-white transition-all disabled:opacity-30 bg-black/60 backdrop-blur-md shadow-sm"
                   >
                     <Zap size={20} />
                   </button>
@@ -643,7 +642,7 @@ const GantiBaju: React.FC = () => {
                     onClick={handleReset}
                     disabled={processing.isProcessing || !resultImage || resultImage === initialResultImage}
                     title="Reset"
-                    className="order-4 lg:order-5 py-4 rounded-2xl border border-white/10 flex items-center justify-center text-white/80 hover:bg-white/15 hover:text-white transition-all disabled:opacity-30 bg-white/10 shadow-sm"
+                    className="order-4 lg:order-5 py-4 rounded-2xl border border-white/15 flex items-center justify-center text-white/80 hover:bg-black/85 hover:text-white transition-all disabled:opacity-30 bg-black/60 backdrop-blur-md shadow-sm"
                   >
                     <Recycle size={20} />
                   </button>
@@ -651,7 +650,7 @@ const GantiBaju: React.FC = () => {
                     onClick={handleDownload}
                     disabled={processing.isProcessing || !resultImage}
                     title="Download"
-                    className="order-6 lg:order-6 py-4 rounded-2xl border border-white/10 flex items-center justify-center text-white/80 hover:bg-white/15 hover:text-white transition-all disabled:opacity-30 bg-white/10 shadow-sm"
+                    className="order-6 lg:order-6 py-4 rounded-2xl border border-white/15 flex items-center justify-center text-white/80 hover:bg-black/85 hover:text-white transition-all disabled:opacity-30 bg-black/60 backdrop-blur-md shadow-sm"
                   >
                     <Download size={20} />
                   </button>

@@ -78,7 +78,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
       
       <div 
         onClick={handleClick}
-        className={`${containerClass} ${dark ? (image ? 'bg-white/20 border-white/30 shadow-lg' : 'bg-white/15 hover:bg-white/25 border-white/20') : 'bg-white border-2'} border border-dashed rounded-[32px] flex items-center justify-center overflow-hidden cursor-pointer transition-all duration-500 group relative min-h-[200px] h-full`}
+        className={`${containerClass} ${dark ? (image ? 'bg-black/75 border-white/30 backdrop-blur-2xl shadow-lg' : 'bg-black/55 hover:bg-black/65 border-white/20 backdrop-blur-2xl') : 'bg-white border-2'} border border-dashed rounded-[32px] flex items-center justify-center overflow-hidden cursor-pointer transition-all duration-500 group relative min-h-[200px] h-full`}
         style={{ 
           borderColor: dark ? undefined : `${primaryColor}40`,
           boxShadow: shadow || 'none'
