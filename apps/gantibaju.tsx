@@ -198,41 +198,11 @@ const GantiBaju: React.FC = () => {
   };
 
   return (
-    <div 
-      className="lg:h-screen lg:overflow-hidden min-h-screen custom-scrollbar overflow-x-hidden relative flex items-center justify-center p-0 md:p-6 transition-colors duration-500"
-      style={{
-        background: `radial-gradient(circle at center, color-mix(in srgb, ${primaryColor} 85%, #000000 15%), color-mix(in srgb, ${primaryColor} 70%, #000000 30%))`
-      }}
-    >
-      <div 
-        className="w-full max-w-7xl lg:h-[94vh] bg-transparent flex flex-col border shadow-2xl md:rounded-[36px] overflow-hidden relative transition-all duration-500 z-10"
-        style={{
-          backgroundColor: `color-mix(in srgb, ${primaryColor} 94%, #000000 6%)`,
-          borderColor: `color-mix(in srgb, ${primaryColor} 30%, rgba(255, 255, 255, 0.2) 70%)`,
-        }}
-      >
-        {/* Background radial grid line patterns */}
-        <div 
-          className="absolute inset-0 pointer-events-none opacity-60 z-0"
-          style={{
-            backgroundImage: `radial-gradient(circle, rgba(255, 255, 255, 0.45) 1.2px, transparent 1.2px)`,
-            backgroundSize: '20px 20px'
-          }}
-        />
-
-        {/* Dynamic ambient backdrop glows */}
-        <div 
-          className="absolute top-[-100px] left-[-100px] w-96 h-96 rounded-full blur-[100px] pointer-events-none transition-colors duration-500 z-0" 
-          style={{ backgroundColor: `color-mix(in srgb, ${primaryColor} 10%, transparent)` }}
-        />
-        <div 
-          className="absolute bottom-[-150px] right-[-100px] w-[500px] h-[500px] rounded-full blur-[130px] pointer-events-none transition-colors duration-500 z-0" 
-          style={{ backgroundColor: `color-mix(in srgb, ${primaryColor} 8%, transparent)` }}
-        />
-
+    <div className="lg:h-screen bg-slate-50/50 lg:overflow-hidden min-h-screen custom-scrollbar overflow-x-hidden">
+      <div className="max-w-2xl lg:max-w-full mx-auto lg:h-full bg-white flex flex-col border-x border-slate-100 shadow-sm">
         {/* Header - Hidden on Desktop */}
         <div 
-          className="p-4 border-b border-white/10 rounded-b-[40px] shadow-xl z-20 lg:hidden relative"
+          className="p-4 border-b border-white/10 rounded-b-[40px] shadow-xl z-20 lg:hidden"
           style={{ 
             background: `linear-gradient(135deg, ${primaryColor}, color-mix(in srgb, ${primaryColor}, black 20%))`,
           }}
@@ -250,10 +220,10 @@ const GantiBaju: React.FC = () => {
           </div>
         </div>
 
-        <div className="p-4 lg:p-4 lg:flex-1 lg:overflow-hidden overflow-y-auto relative z-10">
+        <div className="p-4 lg:p-4 lg:flex-1 lg:overflow-hidden overflow-y-auto">
           <div className="lg:grid lg:grid-cols-12 lg:gap-4 lg:h-full lg:overflow-hidden flex flex-col">
             {/* Column 1: Model & Mode */}
-            <div className="lg:col-span-3 flex flex-col gap-4 lg:h-full lg:overflow-y-auto lg:overflow-x-hidden custom-scrollbar lg:pr-4 lg:border-r lg:border-white/10">
+            <div className="lg:col-span-3 flex flex-col gap-4 lg:h-full lg:overflow-hidden lg:pr-4 lg:border-r lg:border-slate-200">
               {/* Model Upload */}
               <div className="flex-1 flex flex-col min-h-0">
                 <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2 mb-2">
@@ -267,7 +237,6 @@ const GantiBaju: React.FC = () => {
                     onClear={() => { setOriginalModel(null); setBeforeImage(null); }}
                     aspectRatio="9-16"
                     labelInside
-                    dark
                   />
                 </div>
               </div>
@@ -277,13 +246,13 @@ const GantiBaju: React.FC = () => {
                 <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
                   <Layers size={14} className="text-slate-300" /> 2. Mode Pakaian
                 </label>
-                <div className={`grid grid-cols-1 gap-1.5 p-1.5 bg-black/60 backdrop-blur-xl border border-white/10 rounded-2xl transition-opacity duration-300 ${!resultImage ? 'opacity-90' : 'opacity-100'}`}>
+                <div className="grid grid-cols-1 gap-1.5 p-1.5 bg-slate-100 rounded-2xl">
                   {(['PARTS', 'FULL_SET', 'PROMPT'] as const).map((m) => (
                     <button
                       key={m}
                       onClick={() => setMode(m)}
-                      className={`py-3 lg:py-1.5 rounded-xl text-[11px] lg:text-[9px] font-black uppercase transition-all ${mode === m ? 'bg-white/20 text-white shadow-md border border-white/15' : 'text-slate-400 hover:text-white'}`}
-                      style={{ color: mode === m ? 'white' : undefined }}
+                      className={`py-3 lg:py-1.5 rounded-xl text-[11px] lg:text-[9px] font-black uppercase transition-all ${mode === m ? 'bg-white shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
+                      style={{ color: mode === m ? primaryColor : undefined }}
                     >
                       {m === 'FULL_SET' ? 'Satu Set' : m === 'PARTS' ? 'Atasan/Bawahan' : 'Prompt AI'}
                     </button>
@@ -293,7 +262,7 @@ const GantiBaju: React.FC = () => {
             </div>
 
             {/* Column 2: Outfit Selection */}
-            <div className="lg:col-span-3 flex flex-col gap-4 lg:h-full lg:overflow-y-auto lg:overflow-x-hidden custom-scrollbar pt-6 lg:pt-0 lg:px-4 lg:border-r lg:border-white/10">
+            <div className="lg:col-span-3 flex flex-col gap-4 lg:h-full lg:overflow-hidden pt-6 lg:pt-0 lg:px-4 lg:border-r lg:border-slate-200">
               <AnimatePresence mode="wait">
                 {mode === 'FULL_SET' ? (
                   <motion.div
@@ -314,7 +283,6 @@ const GantiBaju: React.FC = () => {
                         onClear={() => setFullSetAsset(null)}
                         aspectRatio="square"
                         labelInside
-                        dark
                       />
                     </div>
 
@@ -327,12 +295,12 @@ const GantiBaju: React.FC = () => {
                           value={customPrompt}
                           onChange={(e) => setCustomPrompt(e.target.value)}
                           placeholder="Mendetailkan hal yang dianggap perlu..."
-                          className="w-full min-h-[80px] p-4 bg-black/60 backdrop-blur-xl border border-white/15 rounded-3xl text-xs font-medium text-white placeholder-white/30 focus:border-white/20 focus:outline-none resize-none transition-all shadow-inner"
+                          className="w-full min-h-[80px] p-4 bg-slate-50 border-2 border-slate-200 rounded-3xl text-xs font-medium focus:border-slate-400 focus:outline-none resize-none transition-all shadow-inner"
                         />
                         <div className="absolute bottom-3 right-3 flex gap-1.5">
                           <button
                             onClick={() => setCustomPrompt('')}
-                            className="p-1.5 bg-white/10 border border-white/10 rounded-lg text-white/70 hover:text-rose-400 hover:bg-white/15 transition-all"
+                            className="p-1.5 bg-white shadow-sm border border-slate-100 rounded-lg text-slate-400 hover:text-rose-500 transition-all"
                             style={{ opacity: customPrompt ? 1 : 0 }}
                           >
                             <Trash2 size={12} />
@@ -340,11 +308,11 @@ const GantiBaju: React.FC = () => {
                           <button
                             onClick={handleEnhancePrompt}
                             disabled={!customPrompt.trim() || processing.isProcessing}
-                            className="p-1.5 bg-white/10 border border-white/10 rounded-lg text-white/70 hover:text-white hover:bg-white/15 transition-all disabled:opacity-50"
+                            className="p-1.5 bg-white shadow-sm border border-slate-100 rounded-lg text-slate-400 hover:text-slate-600 transition-all disabled:opacity-50"
                             title="Sempurnakan dengan AI"
                             style={{ opacity: customPrompt ? 1 : 0 }}
                           >
-                            <Sparkles size={12} style={{ color: customPrompt.trim() ? 'white' : undefined }} />
+                            <Sparkles size={12} style={{ color: customPrompt.trim() ? primaryColor : undefined }} />
                           </button>
                         </div>
                       </div>
@@ -370,7 +338,6 @@ const GantiBaju: React.FC = () => {
                           onClear={() => setTopAsset(null)}
                           aspectRatio="square"
                           labelInside
-                          dark
                         />
                       </div>
                     </div>
@@ -386,7 +353,6 @@ const GantiBaju: React.FC = () => {
                           onClear={() => setBottomAsset(null)}
                           aspectRatio="square"
                           labelInside
-                          dark
                         />
                       </div>
                     </div>
@@ -400,12 +366,12 @@ const GantiBaju: React.FC = () => {
                           value={customPrompt}
                           onChange={(e) => setCustomPrompt(e.target.value)}
                           placeholder="Mendetailkan hal yang dianggap perlu..."
-                          className="w-full min-h-[80px] p-4 bg-black/60 backdrop-blur-xl border border-white/15 rounded-3xl text-xs font-medium text-white placeholder-white/30 focus:border-white/20 focus:outline-none resize-none transition-all shadow-inner"
+                          className="w-full min-h-[80px] p-4 bg-slate-50 border-2 border-slate-200 rounded-3xl text-xs font-medium focus:border-slate-400 focus:outline-none resize-none transition-all shadow-inner"
                         />
                          <div className="absolute bottom-3 right-3 flex gap-1.5">
                           <button
                             onClick={() => setCustomPrompt('')}
-                            className="p-1.5 bg-white/10 border border-white/10 rounded-lg text-white/70 hover:text-rose-400 hover:bg-white/15 transition-all"
+                            className="p-1.5 bg-white shadow-sm border border-slate-100 rounded-lg text-slate-400 hover:text-rose-500 transition-all"
                             style={{ opacity: customPrompt ? 1 : 0 }}
                           >
                             <Trash2 size={12} />
@@ -413,11 +379,11 @@ const GantiBaju: React.FC = () => {
                           <button
                             onClick={handleEnhancePrompt}
                             disabled={!customPrompt.trim() || processing.isProcessing}
-                            className="p-1.5 bg-white/10 border border-white/10 rounded-lg text-white/70 hover:text-white hover:bg-white/15 transition-all disabled:opacity-50"
+                            className="p-1.5 bg-white shadow-sm border border-slate-100 rounded-lg text-slate-400 hover:text-slate-600 transition-all disabled:opacity-50"
                             title="Sempurnakan dengan AI"
                             style={{ opacity: customPrompt ? 1 : 0 }}
                           >
-                            <Sparkles size={12} style={{ color: customPrompt.trim() ? 'white' : undefined }} />
+                            <Sparkles size={12} style={{ color: customPrompt.trim() ? primaryColor : undefined }} />
                           </button>
                         </div>
                       </div>
@@ -439,13 +405,13 @@ const GantiBaju: React.FC = () => {
                         value={customPrompt}
                         onChange={(e) => setCustomPrompt(e.target.value)}
                         placeholder="Contoh: Gaun pesta warna merah dengan motif bunga emas..."
-                        className="w-full min-h-[450px] lg:min-h-[250px] p-6 bg-black/60 backdrop-blur-xl border border-white/15 rounded-[32px] text-base lg:text-sm font-medium text-white placeholder-white/30 focus:border-white/20 focus:outline-none resize-none transition-all shadow-inner"
+                        className="w-full min-h-[450px] lg:min-h-[250px] p-6 bg-slate-50 border-2 border-slate-200 rounded-[32px] text-base lg:text-sm font-medium focus:border-slate-400 focus:outline-none resize-none transition-all shadow-inner"
                       />
                       <div className="absolute bottom-4 right-4 flex gap-2">
                         <button
                           onClick={() => setCustomPrompt('')}
                           disabled={!customPrompt.trim() || processing.isProcessing}
-                          className="p-2 bg-white/10 border border-white/10 rounded-xl text-white/70 hover:text-rose-400 hover:bg-white/15 transition-all disabled:opacity-50"
+                          className="p-2 bg-white shadow-lg border border-slate-100 rounded-xl text-slate-400 hover:text-rose-500 transition-all disabled:opacity-50"
                           title="Hapus Prompt"
                         >
                           <Trash2 size={16} />
@@ -453,10 +419,10 @@ const GantiBaju: React.FC = () => {
                         <button
                           onClick={handleEnhancePrompt}
                           disabled={!customPrompt.trim() || processing.isProcessing}
-                          className="p-2 bg-white/10 border border-white/10 rounded-xl text-white/70 hover:text-white hover:bg-white/15 transition-all disabled:opacity-50"
+                          className="p-2 bg-white shadow-lg border border-slate-100 rounded-xl text-slate-400 hover:text-slate-600 transition-all disabled:opacity-50"
                           title="Sempurnakan dengan AI"
                         >
-                          <Sparkles size={16} style={{ color: customPrompt.trim() ? 'white' : undefined }} />
+                          <Sparkles size={16} style={{ color: customPrompt.trim() ? primaryColor : undefined }} />
                         </button>
                       </div>
                     </div>
@@ -469,9 +435,9 @@ const GantiBaju: React.FC = () => {
                 <button 
                   onClick={handleProcessFitting}
                   disabled={processing.isProcessing || !originalModel || (mode === 'FULL_SET' ? !fullSetAsset : mode === 'PARTS' ? (!topAsset && !bottomAsset) : !customPrompt.trim())}
-                  className="w-full py-5 rounded-3xl text-white font-black uppercase tracking-[0.2em] text-sm shadow-xl transition-all active:scale-95 disabled:opacity-30 flex items-center justify-center gap-3 border border-white/10"
+                  className="w-full py-5 rounded-3xl text-white font-black uppercase tracking-[0.2em] text-sm shadow-xl transition-all active:scale-95 disabled:opacity-30 flex items-center justify-center gap-3"
                   style={{ 
-                    backgroundColor: (processing.isProcessing || !originalModel || (mode === 'FULL_SET' ? !fullSetAsset : mode === 'PARTS' ? (!topAsset && !bottomAsset) : !customPrompt.trim())) ? 'rgba(255,255,255,0.05)' : primaryColor 
+                    backgroundColor: (processing.isProcessing || !originalModel || (mode === 'FULL_SET' ? !fullSetAsset : mode === 'PARTS' ? (!topAsset && !bottomAsset) : !customPrompt.trim())) ? '#cbd5e1' : primaryColor 
                   }}
                 >
                   HASILKAN
@@ -487,7 +453,7 @@ const GantiBaju: React.FC = () => {
                 </label>
                 
                 {/* Aspect Ratio Selection */}
-                <div className={`flex-1 flex items-center gap-2 lg:gap-1 overflow-x-auto no-scrollbar justify-end ml-4 transition-opacity duration-300 ${!resultImage ? 'opacity-90' : 'opacity-100'}`}>
+                <div className="flex-1 flex items-center gap-2 lg:gap-1 overflow-x-auto no-scrollbar justify-end ml-4">
                   {ratios.map((r) => (
                     <button
                       key={r.value}
@@ -495,7 +461,7 @@ const GantiBaju: React.FC = () => {
                       className={`px-3 py-1.5 lg:px-2 lg:py-1 rounded-lg border transition-all text-[10px] lg:text-[8px] font-black shrink-0 ${
                         aspectRatio === r.value 
                           ? 'shadow-sm' 
-                          : 'border-white/10 bg-black/60 backdrop-blur-md text-slate-300 hover:border-white/20 hover:bg-black/85'
+                          : 'border-slate-100 bg-slate-50/50 text-slate-400 hover:border-slate-200'
                       }`}
                       style={{
                         backgroundColor: aspectRatio === r.value ? primaryColor : undefined,
@@ -511,7 +477,7 @@ const GantiBaju: React.FC = () => {
               
               <div className="lg:flex-1 flex items-center justify-center min-h-0 w-full overflow-hidden">
                 <div 
-                  className={`bg-black/75 backdrop-blur-2xl border border-dashed rounded-[24px] flex items-center justify-center overflow-hidden relative group transition-all duration-500 shadow-inner ${!resultImage ? 'opacity-90' : 'opacity-100'} ${
+                  className={`bg-slate-50 border-2 border-dashed rounded-[24px] flex items-center justify-center overflow-hidden relative group transition-all duration-500 shadow-inner ${
                     aspectRatio === '1:1' ? 'aspect-square' :
                     aspectRatio === '3:4' ? 'aspect-[3/4]' :
                     aspectRatio === '4:3' ? 'aspect-[4/3]' :
@@ -519,8 +485,8 @@ const GantiBaju: React.FC = () => {
                     'aspect-[16/9]'
                   }`}
                   style={{ 
-                    borderColor: resultImage ? 'rgba(255, 255, 255, 0.3)' : 'rgba(255, 255, 255, 0.2)',
-                    backgroundColor: resultImage ? 'transparent' : undefined,
+                    borderColor: resultImage ? 'white' : `${primaryColor}40`,
+                    backgroundColor: resultImage ? 'white' : undefined,
                     width: '100%',
                     height: 'auto',
                     maxWidth: '100%',
@@ -535,10 +501,10 @@ const GantiBaju: React.FC = () => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="absolute inset-0 flex flex-col items-center justify-center z-30 bg-black/70 backdrop-blur-sm"
+                        className="absolute inset-0 flex flex-col items-center justify-center z-30 bg-white/80 backdrop-blur-sm"
                       >
                         <img src="https://i.ibb.co.com/HLG6zZnr/LOGO-GUBER.png" className="w-16 h-16 object-contain animate-spin" alt="Logo" />
-                        <p className="mt-4 text-[10px] font-black text-white/80 uppercase tracking-[0.3em] animate-pulse">{processing.progress}</p>
+                        <p className="mt-4 text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] animate-pulse">{processing.progress}</p>
                       </motion.div>
                     ) : resultImage ? (
                       <motion.div
@@ -589,26 +555,27 @@ const GantiBaju: React.FC = () => {
                         </div>
                       </motion.div>
                     ) : (
-                      <div className="flex flex-col items-center justify-center p-12 text-center opacity-100">
-                        <div className="w-20 h-20 rounded-3xl bg-white/10 flex items-center justify-center mb-4">
+                      <div className="flex flex-col items-center justify-center p-12 text-center opacity-40">
+                        <div className="w-20 h-20 rounded-3xl bg-slate-100 flex items-center justify-center mb-4">
                           <img src="https://i.ibb.co.com/HLG6zZnr/LOGO-GUBER.png" className="w-12 h-12 object-contain grayscale opacity-50" alt="Logo" />
                         </div>
-                        <p className="text-xs font-black uppercase tracking-widest text-white">Belum Ada Hasil</p>
+                        <p className="text-xs font-black uppercase tracking-widest">Belum Ada Hasil</p>
                       </div>
                     )}
                   </AnimatePresence>
                 </div>
               </div>
 
-                <div className={`grid grid-cols-5 lg:grid-cols-7 gap-2 lg:gap-3 w-full mx-auto transition-opacity duration-300 ${!resultImage ? 'opacity-90' : 'opacity-100'}`}>
+                {/* Action Buttons */}
+                <div className="grid grid-cols-5 lg:grid-cols-7 gap-2 lg:gap-3 w-full mx-auto">
                   <button 
                     onClick={handleProcessFitting}
                     disabled={processing.isProcessing || !originalModel || (mode === 'FULL_SET' ? !fullSetAsset : mode === 'PARTS' ? (!topAsset && !bottomAsset) : !customPrompt.trim())}
                     title="Generate"
-                    className="hidden lg:flex order-5 lg:order-first col-span-1 lg:col-span-2 py-4 rounded-2xl border border-white/10 text-white items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-lg disabled:opacity-30"
+                    className="hidden lg:flex order-5 lg:order-first col-span-1 lg:col-span-2 py-4 rounded-2xl border-2 text-white items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-lg disabled:opacity-30"
                     style={{ 
-                      backgroundColor: (processing.isProcessing || !originalModel || (mode === 'FULL_SET' ? !fullSetAsset : mode === 'PARTS' ? (!topAsset && !bottomAsset) : !customPrompt.trim())) ? 'rgba(255,255,255,0.05)' : primaryColor, 
-                      borderColor: (processing.isProcessing || !originalModel || (mode === 'FULL_SET' ? !fullSetAsset : mode === 'PARTS' ? (!topAsset && !bottomAsset) : !customPrompt.trim())) ? 'rgba(255,255,255,0.05)' : primaryColor 
+                      backgroundColor: (processing.isProcessing || !originalModel || (mode === 'FULL_SET' ? !fullSetAsset : mode === 'PARTS' ? (!topAsset && !bottomAsset) : !customPrompt.trim())) ? '#cbd5e1' : primaryColor, 
+                      borderColor: (processing.isProcessing || !originalModel || (mode === 'FULL_SET' ? !fullSetAsset : mode === 'PARTS' ? (!topAsset && !bottomAsset) : !customPrompt.trim())) ? '#cbd5e1' : primaryColor 
                     }}
                   >
                     <span className="font-black uppercase tracking-widest text-[10px]">HASILKAN</span>
@@ -618,7 +585,7 @@ const GantiBaju: React.FC = () => {
                     onClick={() => setShowPreview(true)}
                     disabled={processing.isProcessing || !resultImage}
                     title="Preview"
-                    className="order-1 lg:order-2 py-4 rounded-2xl border border-white/15 flex items-center justify-center text-white/80 hover:bg-black/85 hover:text-white transition-all disabled:opacity-30 bg-black/60 backdrop-blur-md shadow-sm"
+                    className="order-1 lg:order-2 py-4 rounded-2xl border-2 border-slate-100 flex items-center justify-center text-slate-400 hover:border-slate-200 hover:text-slate-900 transition-all disabled:opacity-30 bg-white shadow-sm"
                   >
                     <Eye size={20} />
                   </button>
@@ -626,7 +593,7 @@ const GantiBaju: React.FC = () => {
                     onClick={() => setIsCropping(true)}
                     disabled={processing.isProcessing || !resultImage}
                     title="Crop"
-                    className="order-2 lg:order-3 py-4 rounded-2xl border border-white/15 flex items-center justify-center text-white/80 hover:bg-black/85 hover:text-white transition-all disabled:opacity-30 bg-black/60 backdrop-blur-md shadow-sm"
+                    className="order-2 lg:order-3 py-4 rounded-2xl border-2 border-slate-100 flex items-center justify-center text-slate-400 hover:border-slate-200 hover:text-slate-900 transition-all disabled:opacity-30 bg-white shadow-sm"
                   >
                     <Scissors size={20} />
                   </button>
@@ -634,7 +601,7 @@ const GantiBaju: React.FC = () => {
                     onClick={handleSharpen}
                     disabled={processing.isProcessing || !resultImage}
                     title="Sharpen"
-                    className="order-3 lg:order-4 py-4 rounded-2xl border border-white/15 flex items-center justify-center text-white/80 hover:bg-black/85 hover:text-white transition-all disabled:opacity-30 bg-black/60 backdrop-blur-md shadow-sm"
+                    className="order-3 lg:order-4 py-4 rounded-2xl border-2 border-slate-100 flex items-center justify-center text-slate-400 hover:border-slate-200 hover:text-slate-900 transition-all disabled:opacity-30 bg-white shadow-sm"
                   >
                     <Zap size={20} />
                   </button>
@@ -642,7 +609,7 @@ const GantiBaju: React.FC = () => {
                     onClick={handleReset}
                     disabled={processing.isProcessing || !resultImage || resultImage === initialResultImage}
                     title="Reset"
-                    className="order-4 lg:order-5 py-4 rounded-2xl border border-white/15 flex items-center justify-center text-white/80 hover:bg-black/85 hover:text-white transition-all disabled:opacity-30 bg-black/60 backdrop-blur-md shadow-sm"
+                    className="order-4 lg:order-5 py-4 rounded-2xl border-2 border-slate-100 flex items-center justify-center text-slate-400 hover:border-slate-200 hover:text-slate-900 transition-all disabled:opacity-30 bg-white shadow-sm"
                   >
                     <Recycle size={20} />
                   </button>
@@ -650,7 +617,7 @@ const GantiBaju: React.FC = () => {
                     onClick={handleDownload}
                     disabled={processing.isProcessing || !resultImage}
                     title="Download"
-                    className="order-6 lg:order-6 py-4 rounded-2xl border border-white/15 flex items-center justify-center text-white/80 hover:bg-black/85 hover:text-white transition-all disabled:opacity-30 bg-black/60 backdrop-blur-md shadow-sm"
+                    className="order-6 lg:order-6 py-4 rounded-2xl border-2 border-slate-100 flex items-center justify-center text-slate-400 hover:border-slate-200 hover:text-slate-900 transition-all disabled:opacity-30 bg-white shadow-sm"
                   >
                     <Download size={20} />
                   </button>
@@ -663,7 +630,7 @@ const GantiBaju: React.FC = () => {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 20 }}
-                      className="bg-rose-500/10 border border-rose-500/20 p-5 rounded-2xl text-rose-400 text-[10px] font-black text-center uppercase tracking-widest"
+                      className="bg-rose-50 border-2 border-rose-100 p-5 rounded-2xl text-rose-600 text-[10px] font-black text-center uppercase tracking-widest"
                     >
                       {processing.error}
                     </motion.div>

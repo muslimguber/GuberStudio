@@ -13,7 +13,6 @@ interface ImageUploaderProps {
   description?: string;
   labelInside?: boolean;
   shadow?: string;
-  dark?: boolean;
 }
 
 const ImageUploader: React.FC<ImageUploaderProps> = ({ 
@@ -25,8 +24,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
   aspectRatio = '9-16',
   description,
   labelInside = false,
-  shadow,
-  dark = false
+  shadow
 }) => {
   const { primaryColor } = useTheme();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -74,13 +72,13 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
 
   return (
     <div className="flex flex-col items-center gap-3 w-full relative h-full">
-      {!labelInside && <h3 className="text-sm font-black uppercase tracking-widest" style={{ color: dark ? '#ffffff' : primaryColor }}>{label}</h3>}
+      {!labelInside && <h3 className="text-sm font-black uppercase tracking-widest" style={{ color: primaryColor }}>{label}</h3>}
       
       <div 
         onClick={handleClick}
-        className={`${containerClass} ${dark ? (image ? 'bg-black/75 border-white/30 backdrop-blur-2xl shadow-lg' : 'bg-black/55 hover:bg-black/65 border-white/20 backdrop-blur-2xl') : 'bg-white border-2'} border border-dashed rounded-[32px] flex items-center justify-center overflow-hidden cursor-pointer transition-all duration-500 group relative min-h-[200px] h-full`}
+        className={`${containerClass} bg-white border-2 border-dashed rounded-[32px] flex items-center justify-center overflow-hidden cursor-pointer transition-all duration-500 group relative min-h-[200px] h-full`}
         style={{ 
-          borderColor: dark ? undefined : `${primaryColor}40`,
+          borderColor: `${primaryColor}40`,
           boxShadow: shadow || 'none'
         }}
       >
@@ -114,7 +112,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
             )}
             <div 
               className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none"
-              style={{ backgroundColor: dark ? 'rgba(0,0,0,0.4)' : `${primaryColor}15` }}
+              style={{ backgroundColor: `${primaryColor}15` }}
             >
                <span className="bg-white/90 px-4 py-2 rounded-full text-[10px] font-black uppercase shadow-lg" style={{ color: primaryColor }}>Ganti Gambar</span>
             </div>
@@ -130,14 +128,14 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
             </div>
             <span 
               className="text-[11px] font-black uppercase tracking-widest transition-colors"
-              style={{ color: dark ? '#ffffff' : primaryColor }}
+              style={{ color: primaryColor }}
             >
               {labelInside ? label : "Pilih Foto"}
             </span>
           </div>
         )}
       </div>
-      {description && <p className="text-[10px] font-bold text-center px-4 uppercase tracking-tighter opacity-60" style={{ color: dark ? '#ffffff' : primaryColor }}>{description}</p>}
+      {description && <p className="text-[10px] font-bold text-center px-4 uppercase tracking-tighter opacity-60" style={{ color: primaryColor }}>{description}</p>}
       <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" accept="image/*" />
     </div>
   );
