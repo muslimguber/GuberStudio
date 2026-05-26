@@ -10,11 +10,7 @@ export const generateWisata = async (
   seasonText: string,
   aspectRatio: string
 ): Promise<string> => {
-  const options: any = { apiKey: process.env.GEMINI_API_KEY };
-  if (process.env.GEMINI_BASE_URL) {
-    options.baseURL = process.env.GEMINI_BASE_URL;
-  }
-  const ai = new GoogleGenAI(options);
+  const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
   
   const prompt = `
     Create a high-quality, realistic travel photo based on the following inputs:
