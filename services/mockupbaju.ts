@@ -2,7 +2,13 @@
 import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
 import { MockupBajuConfig } from "../types";
 
-const getAI = () => new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+const getAI = () => {
+  const options: any = { apiKey: process.env.GEMINI_API_KEY };
+  if (process.env.GEMINI_BASE_URL) {
+    options.baseURL = process.env.GEMINI_BASE_URL;
+  }
+  return new GoogleGenAI(options);
+};
 
 const cleanBase64 = (base64: string) => {
   return base64.split(',')[1] || base64;

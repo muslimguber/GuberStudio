@@ -266,19 +266,21 @@ export const ThemeCustomizerModal: React.FC<ThemeCustomizerModalProps> = ({ isOp
                 <span style={{ color: `color-mix(in srgb, ${primaryColor} 60%, #94a3b8)` }}>Kecerahan Warna</span>
                 <span className="font-mono text-slate-300 bg-white/5 px-2 py-0.5 rounded-md border border-white/5" style={{ color: `color-mix(in srgb, ${primaryColor} 60%, #cbd5e1)` }}>{hsl.l}%</span>
               </div>
-              <div className="flex items-center justify-center pt-1">
+              <div className="flex items-center gap-3">
+                <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Gelap</span>
                 <input 
                   type="range"
                   min="2"
                   max="90"
                   value={hsl.l}
                   onChange={(e) => handleLightnessChange(Number(e.target.value))}
-                  className="w-full h-2 rounded-lg appearance-none cursor-pointer outline-none transition-all"
+                  className="flex-1 h-2 rounded-lg appearance-none cursor-pointer outline-none transition-all"
                   style={{
                     background: `linear-gradient(to right, #020617, ${hslToHex(hsl.h, hsl.s, 50)}, #ffffff)`,
                     accentColor: primaryColor,
                   }}
                 />
+                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Terang</span>
               </div>
             </div>
 

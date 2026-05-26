@@ -47,7 +47,11 @@ const getAIInternal = () => {
   }
   
   const selectedKey = availableKeys[Math.floor(Math.random() * availableKeys.length)];
-  return { genAI: new GoogleGenAI({ apiKey: selectedKey }), key: selectedKey };
+  const options: any = { apiKey: selectedKey };
+  if (process.env.GEMINI_BASE_URL) {
+    options.baseURL = process.env.GEMINI_BASE_URL;
+  }
+  return { genAI: new GoogleGenAI(options), key: selectedKey };
 };
 
 // Export getAI yang lama agar tidak merusak file modular lain

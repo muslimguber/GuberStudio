@@ -309,7 +309,11 @@ const GuberEdit: React.FC = () => {
     
     setProcessing(prev => ({ ...prev, isProcessing: true, progress: 'Enhancing prompt with AI...' }));
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+      const options: any = { apiKey: process.env.GEMINI_API_KEY };
+      if (process.env.GEMINI_BASE_URL) {
+        options.baseURL = process.env.GEMINI_BASE_URL;
+      }
+      const ai = new GoogleGenAI(options);
       const response = await ai.models.generateContent({
         model: "gemini-3-flash-preview",
         contents: `Enhance this image editing prompt to be more detailed and professional for an AI inpainting model. The goal is to modify the area marked by a brush. Original prompt: "${editPrompt}". Return only the enhanced prompt text.`,
