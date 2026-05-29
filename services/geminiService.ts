@@ -7,13 +7,7 @@ let blacklistedKeys: Set<string> = new Set();
 
 // Fungsi internal untuk mengambil kunci dan instance
 const getAIInternal = () => {
-  const hardcodedKeys = [
-    "AIzaSyA4773itrisKLmwTPvlE39gZJObqpq-A3Y",
-    "AIzaSyAgmiGa30Iwrx0MafwzYz7Vh0XxyaLfPtk",
-    "AIzaSyAjBj_lsDMoxk6h330-Iksy1U_-XlpEvpQ"
-  ];
-  
-  const keys: string[] = [...hardcodedKeys];
+  const keys: string[] = [];
   const isValidFormat = (k: string) => k && k.length > 20 && k.startsWith("AIza");
 
   if (process.env.GEMINI_API_KEY) {
