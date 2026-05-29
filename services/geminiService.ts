@@ -5,268 +5,96 @@ import { PasFotoConfig, KidsModelConfig, AnimeConfig, FusionConfig, GabungConfig
 // Inisialisasi AI dengan dukungan rotasi multiple API Keys untuk menghindari rate limit
 let blacklistedKeys: Set<string> = new Set();
 
-// Helper untuk mengunduh gambar ke format base64 jika endpoint mengembalikannya sebagai URL
-const downloadImageAsBase64 = async (url: string): Promise<string> => {
-  try {
-    const res = await fetch(url);
-    const blob = await res.blob();
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64String = reader.result as string;
-        resolve(base64String);
-      };
-      reader.onerror = reject;
-      reader.readAsDataURL(blob);
+// Fungsi internal untuk mengambil kunci dan instance
+const getAIInternal = () => {
+  const hardcodedKeys = [
+    "AIzaSyA4773itrisKLmwTPvlE39gZJObqpq-A3Y",
+    "AIzaSyAgmiGa30Iwrx0MafwzYz7Vh0XxyaLfPtk",
+    "AIzaSyAjBj_lsDMoxk6h330-Iksy1U_-XlpEvpQ"
+  ];
+  
+  const keys: string[] = [...hardcodedKeys];
+  const isValidFormat = (k: string) => k && k.length > 20 && k.startsWith("AIza");
+
+  if (process.env.GEMINI_API_KEY) {
+    process.env.GEMINI_API_KEY.split(",").forEach(k => {
+      const trimmed = k.trim();
+      if (isValidFormat(trimmed)) keys.push(trimmed);
     });
-  } catch (e) {
-    console.error("Error downloading image:", e);
-    return url;
   }
+  
+  if (process.env.MY_EXTRA_KEYS) {
+    process.env.MY_EXTRA_KEYS.split(",").forEach(k => {
+      const trimmed = k.trim();
+      if (isValidFormat(trimmed)) keys.push(trimmed);
+    });
+  }
+  
+  for (let i = 1; i <= 10; i++) {
+    const key = (process.env as any)[`MY_EXTRA_KEYS_${i}`];
+    if (key) {
+      const trimmed = key.trim();
+      if (isValidFormat(trimmed)) keys.push(trimmed);
+    }
+  }
+  
+  const uniqueKeys = Array.from(new Set(keys));
+  let availableKeys = uniqueKeys.filter(k => !blacklistedKeys.has(k));
+  
+  if (availableKeys.length === 0) {
+    blacklistedKeys.clear();
+    availableKeys = uniqueKeys;
+  }
+  
+  const selectedKey = availableKeys[Math.floor(Math.random() * availableKeys.length)];
+  return { genAI: new GoogleGenAI({ apiKey: selectedKey }), key: selectedKey };
 };
 
-// Fungsi pembantu untuk membersihkan format base64
+// Export getAI yang lama agar tidak merusak file modular lain
+export const getAI = () => {
+  const { genAI } = getAIInternal();
+  return genAI;
+};
+
+// Wrapper untuk menjalankan fungsi AI dengan retry otomatis jika kena limit
+export const runWithRetry = async (operation: (ai: any) => Promise<any>, maxRetries = 3) => {
+  let lastError: any;
+  
+  for (let i = 0; i < maxRetries; i++) {
+    const { genAI, key } = getAIInternal();
+    try {
+      return await operation(genAI);
+    } catch (err: any) {
+      lastError = err;
+      const msg = err?.message || "";
+      
+      if (msg.includes("429") || msg.includes("quota")) {
+        console.warn(`Key ${key.substring(0, 6)}... kena limit. Mencoba kunci lain (${i + 1}/${maxRetries})`);
+        blacklistedKeys.add(key);
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        continue;
+      }
+      throw err;
+    }
+  }
+  return handleApiError(lastError);
+};
+
 export const cleanBase64 = (base64: string) => {
   return base64.split(',')[1] || base64;
 };
 
-// Fetch model-model LiteLLM yang tersedia dari api.koboillm.com/v1
-export const fetchLiteLLMModels = async (apiKey?: string): Promise<string[]> => {
-  const finalApiKey = apiKey || localStorage.getItem('litellm_api_key') || '';
-  const baseUrl = 'https://api.koboillm.com/v1';
-  const headers: any = {
-    'Content-Type': 'application/json'
-  };
-  if (finalApiKey) {
-    headers['Authorization'] = `Bearer ${finalApiKey}`;
-  }
-  try {
-    const res = await fetch(`${baseUrl}/models`, {
-      method: 'GET',
-      headers
-    });
-    if (!res.ok) {
-      throw new Error(`Failed to fetch models: ${res.status} ${res.statusText}`);
-    }
-    const data = await res.json();
-    if (data && Array.isArray(data.data)) {
-      return data.data.map((m: any) => m.id);
-    }
-    return [];
-  } catch (e: any) {
-    console.error("Error fetching LiteLLM models:", e);
-    throw e;
-  }
-};
-
-// Export getAI yang mensimulasikan GoogleGenAI SDK menggunakan REST API LiteLLM api.koboillm.com/v1
-export const getAI = (): any => {
-  const baseUrl = 'https://api.koboillm.com/v1';
-
-  return {
-    models: {
-      generateContent: async ({ model, contents, config }: { model: string, contents: any, config?: any }) => {
-        // Ambil model pilihan pengguna, atau fallback ke model default aplikasi
-        const targetModel = localStorage.getItem('litellm_model') || model || 'gemini-2.5-flash-preview';
-        
-        // Terjemahkan format contents Google Gen AI ke format pesan OpenAI/LiteLLM
-        const parts: any[] = [];
-        if (typeof contents === 'string') {
-          parts.push({ type: 'text', text: contents });
-        } else if (Array.isArray(contents)) {
-          for (const item of contents) {
-            if (typeof item === 'string') {
-              parts.push({ type: 'text', text: item });
-            } else if (item.parts && Array.isArray(item.parts)) {
-              for (const part of item.parts) {
-                if (part.text) {
-                  parts.push({ type: 'text', text: part.text });
-                } else if (part.inlineData) {
-                  parts.push({
-                    type: 'image_url',
-                    image_url: {
-                      url: `data:${part.inlineData.mimeType || 'image/png'};base64,${cleanBase64(part.inlineData.data)}`
-                    }
-                  });
-                }
-              }
-            } else if (item.text) {
-              parts.push({ type: 'text', text: item.text });
-            } else if (item.inlineData) {
-              parts.push({
-                type: 'image_url',
-                image_url: {
-                  url: `data:${item.inlineData.mimeType || 'image/png'};base64,${cleanBase64(item.inlineData.data)}`
-                }
-              });
-            }
-          }
-        } else if (contents && typeof contents === 'object') {
-          if (contents.parts && Array.isArray(contents.parts)) {
-            for (const part of contents.parts) {
-              if (part.text) {
-                parts.push({ type: 'text', text: part.text });
-              } else if (part.inlineData) {
-                parts.push({
-                  type: 'image_url',
-                  image_url: {
-                    url: `data:${part.inlineData.mimeType || 'image/png'};base64,${cleanBase64(part.inlineData.data)}`
-                  }
-                });
-              }
-            }
-          }
-        }
-
-        const headers: any = {
-          'Content-Type': 'application/json'
-        };
-        const apiKey = localStorage.getItem('litellm_api_key') || '';
-        if (apiKey) {
-          headers['Authorization'] = `Bearer ${apiKey}`;
-        }
-
-        const isImageModel = (m: string) => {
-          const l = m.toLowerCase();
-          return l.includes('image') || l.includes('flux') || l.includes('sdxl') || l.includes('stable') || l.includes('dall') || l.includes('paint') || l.includes('generator') || l.includes('midjourney');
-        };
-
-        // Jika terdeteksi model gambar, atau dipanggil dari komponen pembuat gambar (config.imageConfig)
-        if (isImageModel(targetModel) || config?.imageConfig) {
-          try {
-            const textPrompt = parts.filter(p => p.type === 'text').map(p => p.text).join('\n');
-            const translateAspectRatioToSize = (ratio?: string) => {
-              if (!ratio) return '1024x1024';
-              if (ratio === '9:16') return '1024x1792';
-              if (ratio === '16:9') return '1792x1024';
-              if (ratio === '3:4') return '768x1024';
-              if (ratio === '4:3') return '1024x768';
-              return '1024x1024';
-            };
-
-            const imageBody = {
-              prompt: textPrompt || 'high quality professional photo',
-              model: targetModel,
-              n: 1,
-              size: translateAspectRatioToSize(config?.imageConfig?.aspectRatio),
-              response_format: 'b64_json'
-            };
-
-            const imgRes = await fetch(`${baseUrl}/images/generations`, {
-              method: 'POST',
-              headers,
-              body: JSON.stringify(imageBody)
-            });
-
-            if (imgRes.ok) {
-              const resData = await imgRes.json();
-              const b64 = resData.data?.[0]?.b64_json || resData.data?.[0]?.url;
-              if (b64) {
-                let finalB64 = b64;
-                if (b64.startsWith('http')) {
-                  finalB64 = await downloadImageAsBase64(b64);
-                }
-                return {
-                  candidates: [{
-                    content: {
-                      parts: [{
-                        inlineData: {
-                          data: cleanBase64(finalB64),
-                          mimeType: 'image/png'
-                        }
-                      }]
-                    }
-                  }],
-                  text: 'Image generated successfully'
-                };
-              }
-            } else {
-              const errText = await imgRes.text();
-              console.warn("LiteLLM /images/generations error, falling back to chat completions:", errText);
-            }
-          } catch (e) {
-            console.warn("Failed to generate image via /images/generations, falling back to chat completions:", e);
-          }
-        }
-
-        // Default: Chat completions OpenAI/LiteLLM format
-        const isJson = config?.responseMimeType === 'application/json' || config?.responseSchema;
-        const chatBody = {
-          model: targetModel,
-          messages: [
-            {
-              role: 'user',
-              content: parts
-            }
-          ],
-          ...(isJson ? { response_format: { type: 'json_object' } } : {})
-        };
-
-        const res = await fetch(`${baseUrl}/chat/completions`, {
-          method: 'POST',
-          headers,
-          body: JSON.stringify(chatBody)
-        });
-
-        if (!res.ok) {
-          const errText = await res.text();
-          throw new Error(`LiteLLM Error (${res.status}): ${errText}`);
-        }
-
-        const resData = await res.json();
-        const textContent = resData.choices?.[0]?.message?.content || '';
-
-        const partsArray: any[] = [{ text: textContent }];
-
-        // Ekstraksi data base64 image dari output teks jika ada (beberapa image model mengembalikan markdown base64)
-        const base64Regex = /data:image\/(png|jpeg|webp);base64,([A-Za-z0-9+/=]+)/;
-        const match = textContent.match(base64Regex);
-        if (match) {
-          partsArray.push({
-            inlineData: {
-              data: match[2],
-              mimeType: `image/${match[1]}`
-            }
-          });
-        } else {
-          const rawBase64Regex = /(?:[A-Za-z0-9+/]{4}){15,}/g;
-          const rawMatches = textContent.match(rawBase64Regex);
-          if (rawMatches) {
-            const longest = rawMatches.reduce((a: string, b: string) => a.length > b.length ? a : b, "");
-            if (longest.length > 1000) {
-              partsArray.push({
-                inlineData: {
-                  data: longest,
-                  mimeType: 'image/png'
-                }
-              });
-            }
-          }
-        }
-
-        return {
-          candidates: [{
-            content: {
-              parts: partsArray
-            }
-          }],
-          text: textContent
-        };
-      }
-    }
-  };
-};
-
-// Wrapper untuk menjalankan fungsi AI dengan retry otomatis
-export const runWithRetry = async (operation: (ai: any) => Promise<any>, maxRetries = 3) => {
-  const ai = getAI();
-  return await operation(ai);
-};
-
-export const extractImageFromResponse = (response: any) => {
+export const extractImageFromResponse = (response: GenerateContentResponse) => {
   const candidate = response.candidates?.[0];
   if (!candidate?.content?.parts) {
-    throw new Error("Gagal menghasilkan gambar. Hubungi administrator atau periksa model pilihan Anda.");
+    const finishReason = candidate?.finishReason;
+    if (finishReason === 'SAFETY') {
+      throw new Error("Permintaan ditolak oleh filter keamanan AI. Silakan coba dengan prompt atau gambar lain.");
+    }
+    if (finishReason === 'RECITATION') {
+      throw new Error("Permintaan ditolak karena terdeteksi konten hak cipta. Silakan coba lagi.");
+    }
+    throw new Error("Gagal menghasilkan gambar. Server AI mungkin sedang sibuk atau permintaan dibatasi.");
   }
   const part = candidate.content.parts.find((p: any) => p.inlineData);
   if (part?.inlineData?.data) {
@@ -281,6 +109,13 @@ export const getRandomSeed = () => Math.floor(Math.random() * 1000000);
 const handleApiError = (err: any) => {
   console.error("API Call Error:", err);
   const msg = err?.message || "";
+  
+  if (msg.includes("429")) {
+    throw new Error("API LIMIT: Kecepatan akses terlalu tinggi. Tunggu 30-60 detik sebelum menekan tombol lagi.");
+  }
+  if (msg.includes("quota")) {
+    throw new Error("KUOTA HABIS: Limit harian akun ini telah tercapai. Silakan ganti akun di sidebar.");
+  }
   throw new Error(msg || "Koneksi terputus. Silakan klik proses sekali lagi.");
 };
 

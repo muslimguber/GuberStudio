@@ -69,7 +69,6 @@ import { ShieldCheck, Globe, Menu } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ThemeCustomizerModal } from './src/components/ThemeCustomizerModal';
 import { ThemeProvider, useTheme } from './src/contexts/ThemeContext';
-import { fetchLiteLLMModels } from './services/geminiService';
 
 export const Icons = {
   Home: () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-11z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>,
@@ -104,58 +103,6 @@ export const Icons = {
 
 const AppContent: React.FC = () => {
   const [favoriteApps, setFavoriteApps] = useState<Set<AppId>>(new Set<AppId>());
-  const [liteLLMKey, setLiteLLMKey] = useState(() => localStorage.getItem('litellm_api_key') || '');
-  const [selectedModel, setSelectedModel] = useState(() => localStorage.getItem('litellm_model') || 'gemini-2.5-flash-preview');
-  const [modelList, setModelList] = useState<string[]>(() => {
-    try {
-      const saved = localStorage.getItem('litellm_model_list');
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
-  const [isFetchingModels, setIsFetchingModels] = useState(false);
-  const [fetchError, setFetchError] = useState<string | null>(null);
-
-  const handleKeyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
-    setLiteLLMKey(val);
-    localStorage.setItem('litellm_api_key', val);
-  };
-
-  const handleModelChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const val = e.target.value;
-    setSelectedModel(val);
-    localStorage.setItem('litellm_model', val);
-  };
-
-  const triggerFetchModels = async () => {
-    setIsFetchingModels(true);
-    setFetchError(null);
-    try {
-      const models = await fetchLiteLLMModels(liteLLMKey);
-      if (models && models.length > 0) {
-        setModelList(models);
-        localStorage.setItem('litellm_model_list', JSON.stringify(models));
-        if (!models.includes(selectedModel)) {
-          setSelectedModel(models[0]);
-          localStorage.setItem('litellm_model', models[0]);
-        }
-      } else {
-        setFetchError('Tidak ada model yang ditemukan.');
-      }
-    } catch (e: any) {
-      setFetchError(e?.message || 'Gagal memuat model. Periksa API Key.');
-    } finally {
-      setIsFetchingModels(false);
-    }
-  };
-
-  useEffect(() => {
-    if (liteLLMKey && modelList.length === 0) {
-      triggerFetchModels();
-    }
-  }, []);
   const [activeApp, setActiveApp] = useState<AppId>(() => {
     const params = new URLSearchParams(window.location.search);
     const appParam = params.get('app') as AppId;
@@ -613,58 +560,6 @@ const AppContent: React.FC = () => {
                 <Icons.Close />
               </button>
             )}
-          </div>
-
-          {/* LiteLLM API Config widget */}
-          <div className="p-2.5 rounded-xl border border-white/10 bg-white/5 space-y-2 text-white">
-            <div className="flex items-center justify-between">
-              <span className="text-[9px] font-bold tracking-wider uppercase text-[var(--color-secondary)] opacity-85">LiteLLM Config</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            </div>
-            
-            <div className="space-y-1.5">
-              {/* API Key Input */}
-              <input 
-                type="password"
-                value={liteLLMKey}
-                onChange={handleKeyChange}
-                placeholder="LiteLLM API Key (opsional)"
-                className="w-full bg-black/20 border border-white/10 rounded-lg px-2.5 py-1 text-[9px] font-medium text-white placeholder-white/30 outline-none focus:border-white/20 transition-all"
-              />
-              
-              {/* Fetch button and select models list */}
-              <div className="flex gap-1.5">
-                <select
-                  value={selectedModel}
-                  onChange={handleModelChange}
-                  className="flex-1 bg-black/25 border border-white/10 rounded-lg px-2 py-0.5 text-[9px] font-bold text-white outline-none focus:border-white/20 transition-all"
-                  style={{ colorScheme: 'dark' }}
-                >
-                  {modelList.length === 0 ? (
-                    <option value="gemini-2.5-flash-preview">gemini-2.5-flash-preview</option>
-                  ) : (
-                    modelList.map((m) => (
-                      <option key={m} value={m}>
-                        {m}
-                      </option>
-                    ))
-                  )}
-                </select>
-                
-                <button
-                  type="button"
-                  onClick={triggerFetchModels}
-                  disabled={isFetchingModels}
-                  className="bg-white/10 border border-white/10 hover:bg-white/20 active:scale-95 disabled:opacity-50 disabled:scale-100 rounded-lg px-2 py-1 text-[9px] font-black uppercase tracking-wider transition-all"
-                >
-                  {isFetchingModels ? '...' : 'Fetch'}
-                </button>
-              </div>
-              
-              {fetchError && (
-                <div className="text-[7.5px] text-rose-300 font-bold leading-tight">{fetchError}</div>
-              )}
-            </div>
           </div>
         </div>
 
