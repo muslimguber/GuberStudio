@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { Download } from 'lucide-react';
+import { Download, MessageCircle } from 'lucide-react';
 
 export const DraggableDownloadButton: React.FC = () => {
   const constraintsRef = useRef(null);
@@ -58,17 +58,29 @@ export const DraggableDownloadButton: React.FC = () => {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
-        <a 
-          href="https://drive.google.com/file/d/1GJtfZDT8pw0X5Hr3w0cPcUGaR80aazHw/view?usp=drive_link"
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={handleClick}
-          className="flex items-center justify-center gap-3 px-6 py-4 w-[220px] bg-[var(--color-primary)] hover:opacity-90 border-2 border-white/20 text-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.4)] transition-colors"
-          title="Install App"
-        >
-          <Download size={22} strokeWidth={2.5} />
-          <span className="text-[15px] font-bold tracking-wider leading-none mt-0.5">INSTAL APLIKASI</span>
-        </a>
+        <div className="flex flex-col gap-3">
+          <a 
+            href="https://drive.google.com/file/d/1GJtfZDT8pw0X5Hr3w0cPcUGaR80aazHw/view?usp=drive_link"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={handleClick}
+            className="flex items-center justify-center gap-3 px-6 py-4 w-[220px] bg-[var(--color-primary)] hover:opacity-90 border-2 border-white/20 text-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.4)] transition-colors"
+            title="Install App"
+          >
+            <Download size={22} strokeWidth={2.5} />
+            <span className="text-[15px] font-bold tracking-wider leading-none mt-0.5">INSTAL APLIKASI</span>
+          </a>
+          <a 
+            href="https://chat.whatsapp.com/FYFfXStud2JIHIc44tC46E?s=sw&p=a&ilr=0&amv=1"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={handleClick}
+            className="flex items-center justify-center px-4 py-4 w-[220px] bg-[#25D366] hover:opacity-90 border-2 border-white/20 text-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.4)] transition-colors whitespace-nowrap"
+            title="Join WhatsApp Group"
+          >
+            <span className="text-[15px] font-bold tracking-wider leading-none mt-0.5">JOIN GRUP GRATIS</span>
+          </a>
+        </div>
       </motion.div>
     </div>
   );
