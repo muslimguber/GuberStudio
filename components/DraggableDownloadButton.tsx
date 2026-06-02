@@ -39,11 +39,11 @@ export const DraggableDownloadButton: React.FC = () => {
           target="_blank"
           rel="noopener noreferrer"
           onClick={handleClick}
-          className="flex flex-col items-center justify-center w-[60px] h-[60px] bg-[var(--color-primary)] hover:opacity-90 border-2 border-white/20 text-white rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.3)] transition-colors"
+          className="flex items-center justify-center gap-2 px-4 py-3 bg-[var(--color-primary)] hover:opacity-90 border border-white/20 text-white rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.3)] transition-colors"
           title="Install App"
         >
-          <Download size={24} className="mb-0.5" />
-          <span className="text-[9px] font-bold tracking-wider leading-none">APK</span>
+          <Download size={18} />
+          <span className="text-xs font-bold tracking-wider leading-none">INSTAL APLIKASI</span>
         </a>
       </motion.div>
     </div>
