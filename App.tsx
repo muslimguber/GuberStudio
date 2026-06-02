@@ -99,9 +99,6 @@ export const Icons = {
   Close: () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
   ),
-  Download: () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
-  ),
 };
 
 const AppContent: React.FC = () => {
@@ -618,20 +615,30 @@ const AppContent: React.FC = () => {
           </React.Fragment>
         );
       })}
-          <div className="h-[20px] w-full shrink-0"></div> 
+          <div className="h-[60px] w-full shrink-0"></div> 
         </nav>
 
-        <div className="mt-auto px-4 pb-4 space-y-3 shrink-0">
+
+
+        <div className="mt-auto px-4 pb-4 space-y-2">
           <a
-            href="https://drive.google.com/file/d/1GJtfZDT8pw0X5Hr3w0cPcUGaR80aazHw/view?usp=sharing"
+            href="https://drive.google.com/file/d/1GJtfZDT8pw0X5Hr3w0cPcUGaR80aazHw/view?usp=drive_link"
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white p-3 rounded-lg transition-all font-bold text-[10px] uppercase tracking-widest shadow-lg shadow-blue-500/20"
+            className="w-full p-3 bg-white/10 hover:bg-white/20 transition-all rounded-lg border border-white/10 flex items-center gap-3 group"
           >
-            <Icons.Download />
-            Download APK
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-[var(--color-secondary)] group-hover:text-white transition-colors"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+            <div className="flex flex-col items-start leading-tight">
+              <span className="text-[10px] font-black text-white uppercase tracking-widest opacity-80 group-hover:opacity-100 transition-opacity">
+                Install APK
+              </span>
+              <span className="text-[8px] font-bold text-[var(--color-secondary)] uppercase tracking-wider opacity-60">
+                Guber Studio App
+              </span>
+            </div>
           </a>
-          <div className="p-4 bg-white/10 rounded-lg border border-white/10 flex items-center gap-3">
+
+          <div className="p-3 bg-white/10 rounded-lg border border-white/10 flex items-center gap-3">
             <ShieldCheck size={20} className="text-[var(--color-secondary)]" />
             <span className="text-[9px] font-black text-white uppercase tracking-widest leading-tight opacity-70">
               {allAppsMetadata.length} Fitur Premium Aktif
