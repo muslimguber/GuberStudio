@@ -29,7 +29,7 @@ const GuberHome: React.FC<GuberHomeProps> = ({ onStart, apps, onSelectApp }) => 
   return (
     <div 
       id="guber-home-outer-frame" 
-      className="min-h-screen w-full flex items-center justify-center p-4 sm:p-6 md:p-8 transition-colors duration-500"
+      className="min-h-screen w-full flex items-center justify-center p-0 md:p-8 transition-colors duration-500"
       style={{
         background: `radial-gradient(circle at center, color-mix(in srgb, ${primaryColor} 85%, #000000 15%), color-mix(in srgb, ${primaryColor} 70%, #000000 30%))`
       }}
@@ -38,7 +38,7 @@ const GuberHome: React.FC<GuberHomeProps> = ({ onStart, apps, onSelectApp }) => 
       {/* Bingkai Utama Berbentuk Rounded Elips Melayang */}
       <div 
         id="guber-home-root" 
-        className="w-full max-w-6xl rounded-[32px] md:rounded-[48px] border text-slate-100 flex flex-col items-center pt-16 md:pt-24 px-6 md:px-12 pb-20 relative overflow-hidden select-none shadow-2xl transition-all duration-500"
+        className="w-full h-full min-h-screen md:min-h-0 md:max-w-6xl rounded-none md:rounded-[48px] md:border text-slate-100 flex flex-col items-center pt-16 md:pt-24 px-6 md:px-12 pb-20 relative overflow-hidden select-none shadow-none md:shadow-2xl transition-all duration-500"
         style={{
           backgroundColor: `color-mix(in srgb, ${primaryColor} 94%, #000000 6%)`,
           borderColor: `color-mix(in srgb, ${primaryColor} 30%, rgba(255, 255, 255, 0.2) 70%)`,
